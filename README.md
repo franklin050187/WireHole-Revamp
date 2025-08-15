@@ -130,19 +130,6 @@ sudo systemctl restart docker
 * **Volumes**: All service configurations and data (Unbound, Pi-hole, WireGuard) are persisted in the `unbound/`, `etc-pihole/`, `etc-dnsmasq.d/`, and `wireguard-easy-data/` directories.
 * **`.env`**: Stores passwords, server URL, and timezone.
 
----
-
-## 🤝 Contributing
-
-Contributions are welcome!
-
-1. Fork the repo.
-2. Create a branch (`git checkout -b feature/your-feature`).
-3. Commit your changes (`git commit -m 'Add new feature'`).
-4. Push (`git push origin feature/your-feature`).
-5. Open a Pull Request.
-
----
 
 ## 📄 License
 
