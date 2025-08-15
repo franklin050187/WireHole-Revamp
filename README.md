@@ -8,10 +8,10 @@ Wirehole is a self-hosted solution combining **WireGuard VPN**, **Pi-hole** (ad 
 
 ## 🚀 Features
 
-*   **WireGuard VPN:** Fast, modern, and secure remote access.
-*   **Pi-hole:** Network-wide ad and tracker blocking.
-*   **Unbound (Recursive DNS):** Direct, private DNS resolution.
-*   **Docker-Compose:** Easy deployment and management.
+* **WireGuard VPN:** Fast, modern, and secure remote access.
+* **Pi-hole:** Network-wide ad and tracker blocking.
+* **Unbound (Recursive DNS):** Direct, private DNS resolution.
+* **Docker-Compose:** Easy deployment and management.
 
 ## 🏗️ Architecture
 
@@ -19,7 +19,7 @@ Wirehole is a self-hosted solution combining **WireGuard VPN**, **Pi-hole** (ad 
 +------------------+     +-----------------+     +-----------------+
 |   VPN Clients    |<--->|   WireGuard     |---->|     Pi-hole     |
 | (Mobile/Laptop)  |     |  (wg-easy)      |<----+ (Ad-blocking,   |
-+------------------+     |                 |     |   DNS Filtering)  |
++------------------+     |                 |     |   DNS Filtering)|
                          +-----------------+     +-----------------+
                                                      |
                                                      V
@@ -37,18 +37,18 @@ Wirehole is a self-hosted solution combining **WireGuard VPN**, **Pi-hole** (ad 
 
 ## 📋 Prerequisites
 
-*   **Docker:** [Installation Guide](https://docs.docker.com/get-docker/)
-*   **Docker Compose:** [Installation Guide](https://docs.docker.com/compose/install/)
+* **Docker:** [Installation Guide](https://docs.docker.com/get-docker/)
+* **Docker Compose:** [Installation Guide](https://docs.docker.com/compose/install/)
 
 ## ⚙️ Installation & Setup
 
-1.  **Clone the Repository:**
+1. **Clone the Repository:**
     ```bash
     git clone https://github.com/Turtlecute33/WireHole-Revamp.git
     cd WireHole-Revamp
     ```
 
-2.  **Edit `.env` File:**
+2. **Edit `.env` File:**
     Open the `.env` file in the project root and update the placeholder variables:
 
     ```env
@@ -61,46 +61,89 @@ Wirehole is a self-hosted solution combining **WireGuard VPN**, **Pi-hole** (ad 
     # WireGuard Web UI Password
     WGUI_PASSWORD='your_wireguard_web_password'
 
+    # Set your timezone for Pi-hole and Unbound
+    TZ='Your/Timezone'  # Example: Europe/London or America/New_York
     ```
-    *Choose strong, unique passwords.*
+    *Choose strong, unique passwords, and set the correct timezone.*
 
-3.  **Start Services:**
+3. **Start Services:**
     ```bash
     docker-compose up -d
     ```
 
-4.  **Verify:**
+4. **Verify:**
     ```bash
     docker-compose ps
     ```
     All services should be `Up`.
 
+---
+
+## 🛠 Troubleshooting
+
+### Port 53 Already in Use
+
+If you see an error like:
+
+```
+failed to bind host port for 0.0.0.0:53: address already in use
+```
+
+It means another service (often `systemd-resolved`) is using port 53.
+
+**Fix:**
+```bash
+sudo systemctl stop systemd-resolved
+sudo systemctl disable systemd-resolved
+```
+
+Then edit `/etc/resolv.conf` to use a public DNS server:
+```bash
+sudo nano /etc/resolv.conf
+```
+Replace its contents with:
+```
+nameserver 1.1.1.1
+```
+Save the file and restart Docker:
+```bash
+sudo systemctl restart docker
+```
+
+---
+
 ## 🚀 Usage
 
-*   **Pi-hole Admin:** Access at `http://your_server_public_ip_or_hostname/admin` (using `FTLCONF_webserver_api_password`).
-*   **WireGuard Web UI:** Access at `http://your_server_public_ip_or_hostname:51821` (using `WGUI_PASSWORD`) to add clients and generate configurations.
-    *   **Note:** When generating client configs, ensure the DNS is set to `10.2.0.100` (Pi-hole's internal IP).
-*   **Connect Clients:**
-    1.  Install WireGuard client: [wireguard.com/install](https://www.wireguard.com/install/)
-    2.  Generate client config via WireGuard Web UI.
-    3.  Import config (QR code for mobile, `.conf` file for desktop).
-    4.  Activate VPN.
+* **Pi-hole Admin:** Access at `http://your_server_public_ip_or_hostname/admin` (using `FTLCONF_webserver_api_password`).
+* **WireGuard Web UI:** Access at `http://your_server_public_ip_or_hostname:51821` (using `WGUI_PASSWORD`) to add clients and generate configurations.
+    * **Note:** When generating client configs, set DNS to `10.2.0.100` (Pi-hole’s internal IP).
+* **Connect Clients:**
+    1. Install WireGuard client: [wireguard.com/install](https://www.wireguard.com/install/)
+    2. Generate client config via WireGuard Web UI.
+    3. Import config (QR code for mobile, `.conf` file for desktop).
+    4. Activate VPN.
+
+---
 
 ## 🔧 Configuration Details
 
-*   **`docker-compose.yml`**: Defines network (`10.2.0.0/24`) and port mappings (`80`, `53`, `51820`, `51821`). Adjust if conflicts occur.
-*   **Volumes**: All service configurations and data (Unbound, Pi-hole, WireGuard) are persisted in the `unbound/`, `etc-pihole/`, `etc-dnsmasq.d/`, and `wireguard-easy-data/` directories.
-*   **`.env`**: Critical environment variables for passwords, server URL, and timezone.
+* **`docker-compose.yml`**: Defines network (`10.2.0.0/24`) and port mappings (`80`, `53`, `51820`, `51821`). Adjust if conflicts occur.
+* **Volumes**: All service configurations and data (Unbound, Pi-hole, WireGuard) are persisted in the `unbound/`, `etc-pihole/`, `etc-dnsmasq.d/`, and `wireguard-easy-data/` directories.
+* **`.env`**: Stores passwords, server URL, and timezone.
+
+---
 
 ## 🤝 Contributing
 
 Contributions are welcome!
 
-1.  Fork the repo.
-2.  Create a branch (`git checkout -b feature/your-feature`).
-3.  Commit your changes (`git commit -m 'Add new feature'`).
-4.  Push (`git push origin feature/your-feature`).
-5.  Open a Pull Request.
+1. Fork the repo.
+2. Create a branch (`git checkout -b feature/your-feature`).
+3. Commit your changes (`git commit -m 'Add new feature'`).
+4. Push (`git push origin feature/your-feature`).
+5. Open a Pull Request.
+
+---
 
 ## 📄 License
 
