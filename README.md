@@ -76,7 +76,6 @@ Wirehole is a self-hosted solution combining **WireGuard VPN**, **Pi-hole** (ad 
     ```
     All services should be `Up`.
 
----
 
 ## 🛠 Troubleshooting
 
@@ -109,7 +108,6 @@ Save the file and restart Docker:
 sudo systemctl restart docker
 ```
 
----
 
 ## 🚀 Usage
 
@@ -122,7 +120,6 @@ sudo systemctl restart docker
     3. Import config (QR code for mobile, `.conf` file for desktop).
     4. Activate VPN.
 
----
 
 ## 🔧 Configuration Details
 
