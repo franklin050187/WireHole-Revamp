@@ -37,8 +37,7 @@ Wirehole is a self-hosted solution combining **WireGuard VPN**, **Pi-hole** (ad 
 
 ## 📋 Prerequisites
 
-* **Docker:** [Installation Guide](https://docs.docker.com/get-docker/)
-* **Docker Compose:** [Installation Guide](https://docs.docker.com/compose/install/)
+* **Docker Compose:** [Installation Guide]([https://docs.docker.com/compose/install/](https://docs.docker.com/engine/install/))
 
 ## ⚙️ Installation & Setup
 
