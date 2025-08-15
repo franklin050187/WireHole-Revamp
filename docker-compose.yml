@@ -38,7 +38,7 @@ services:
       private_network:
         ipv4_address: 10.2.0.100
     environment:
-      - TZ=Europe/Rome #change it to your location
+      - TZ=${TZ}
       - FTLCONF_webserver_api_password=${FTLCONF_webserver_api_password}
       - FTLCONF_dns_upstreams=10.2.0.200#53 #unbound DNS 
 
