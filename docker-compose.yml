@@ -1,0 +1,73 @@
+networks:
+  private_network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.2.0.0/24
+
+services:
+  unbound:
+    image: mvance/unbound:latest
+    container_name: unbound
+    restart: unless-stopped
+    hostname: unbound
+    volumes:
+      - ./unbound:/opt/unbound/etc/unbound/
+    networks:
+      private_network:
+        ipv4_address: 10.2.0.200
+
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    restart: unless-stopped
+    depends_on:
+      - unbound
+    hostname: pihole
+    ports:
+      - "80:80/tcp"
+      - "53:53/tcp"
+      - "53:53/udp"
+    volumes:
+      - ./etc-pihole/:/etc/pihole/
+      - ./etc-dnsmasq.d/:/etc/dnsmasq.d/
+    cap_add:
+      - NET_ADMIN
+      - SYS_NICE
+    networks:
+      private_network:
+        ipv4_address: 10.2.0.100
+    environment:
+      - TZ=Europe/Rome #change it to your location
+      - FTLCONF_webserver_api_password=${FTLCONF_webserver_api_password}
+      - FTLCONF_dns_upstreams=10.2.0.200#53 #unbound DNS 
+
+  wg-easy:
+    image: weejewel/wg-easy
+    container_name: wg-easy
+    restart: unless-stopped
+    depends_on:
+      - pihole
+    ports:
+      - "51820:51820/udp"
+      - "51821:51821/tcp" # This is the new port for the Web UI
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+      - net.ipv4.ip_forward=1
+    volumes:
+      - ./wireguard-easy-data:/etc/wireguard
+    networks:
+      private_network:
+        ipv4_address: 10.2.0.2 # Same IP as your old wireguard container
+    environment:
+      # This must be your server's public IP address
+      - WG_HOST=${SERVERURL}
+
+      # This is the password for the Web UI
+      - PASSWORD=${WGUI_PASSWORD}
+
+      # This should be your Pi-hole's IP address
+      - WG_DEFAULT_DNS=10.2.0.100
