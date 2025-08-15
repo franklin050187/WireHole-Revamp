@@ -54,15 +54,13 @@ Wirehole is a self-hosted solution combining **WireGuard VPN**, **Pi-hole** (ad 
     ```env
     # Pi-hole Web UI Password
     FTLCONF_webserver_api_password='your_pihole_web_password'
-
+    
     # WireGuard Public IP/Hostname (Your server's public IP address or domain)
     SERVERURL='your_server_public_ip_or_hostname'
-
+    
     # WireGuard Web UI Password
     WGUI_PASSWORD='your_wireguard_web_password'
 
-    # Timezone for Pi-hole container (e.g., Europe/Rome, America/New_York)
-    TZ='Europe/Rome'
     ```
     *Choose strong, unique passwords.*
 
